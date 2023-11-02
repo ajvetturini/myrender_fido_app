@@ -1,0 +1,320 @@
+{% extends "template.html" %}
+
+{% block content %}
+<head>
+    <title>Input Variables</title>
+    <script src="/static/js/scripts.js" defer></script>
+</head>
+<body>
+    <h1>2D Ply Generator Inputs</h1>
+    <p> Please read the accompanying <a href="parameter_definitions">documentation</a> to understand what the parameters may control </p>
+    <p> The bottom of the webpage has a "Download Input File" which will allow you to download the input conditions to a JSON file for running the MOSA Algorithm</p>
+    <p> NOTE: There are certain design constraints that we can't check for in this input generator script that may cause errors in MOSA. Please review those errors to determine what may be causing input issues (for example, you may be trying to define an edge that is too small to use due to DAEDALUS2 limitations for a minimal edge length of 39 basepairs (~14nm).</p>
+
+
+    <div class="custom-input-box" >
+        <div class="header" onclick="toggleBox('input-box-content')" data-target="input-box-content">Preload Example Inputs</div>
+        <div id="input-box-content" class="content">
+            <p> The buttons below will prematurely fill in conditions and allow you to automatically download a set input condition! </p>
+            <div class="input-row">
+                <div class="input-item">
+                    <button type="button" id="octaFrame" name="octaFrame">Octahedral Frame</button>
+                </div>
+                <div class="input-item">
+                    <button type="button" id="asymObject" name="asymObject">Asymmetric Object</button>
+                </div>
+                <div class="input-item">
+                    <button type="button" id="wireframeBeam" name="wireframeBeam">Beam</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="custom-input-box">
+        <div class="header" onclick="toggleBox('annealing-box-content')" data-target="annealing-box-content">Simulated Annealing Parameters</div>
+        <div id="annealing-box-content" class="content">
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="cooling_schedule">Select a Cooling Schedule:</label>
+                        <select id="cooling_schedule" name="cooling_schedule">
+                            <option value="Huang" selected>Huang</option>
+                            <option value="Triki">Triki</option>
+                            <option value="Geometric">Geometric</option>
+                        </select>
+                </div>
+                <div class="input-item">
+                    <label for="acceptance_function">Select an Acceptance Function:</label>
+                        <select id="acceptance_function" name="acceptance_function">
+                            <option value="Standard" selected>Standard</option>
+                            <option value="Logistic">Logistic</option>
+                            <option value="Linear">Linear</option>
+                        </select>
+                </div>
+
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="max_epochs">Max Number of Epochs:</label>
+                    <input type="number" id="max_epochs" name="max_epochs" step="1" value="10" min="{{ data.min_epochs }}" max="{{ data.max_epochs }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="NT1">NT1:</label>
+                    <input type="number" id="NT1" name="NT1" step="1" value="1000" min="{{ data.min_NT1 }}" max="{{ data.max_NT1 }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="NT2">NT2:</label>
+                    <input type="number" id="NT2" name="NT2" step="1" value="500" min="{{ data.min_NT2 }}" max="{{ data.max_NT2 }}"><br><br>
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="N_Bi">N_Bi:</label>
+                    <input type="number" id="N_Bi" name="N_Bi" step="1" value="1000" min="{{ data.min_NBi }}" max="{{ data.max_NBi }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="Na">Na:</label>
+                    <input type="number" id="Na" name="Na" step="1" value="200" min="{{ data.min_Na }}" max="{{ data.max_Na }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="N_Bi_LowerLim">N_Bi Lower Limit:</label>
+                    <input type="number" id="N_Bi_LowerLim" name="N_Bi_LowerLim" step="1" value="10" min="{{ data.min_Nbi_LowerLim }}" max="{{ data.max_Nbi_LowerLim }}"><br><br>
+                </div>
+
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="r_b">r_b:</label>
+                    <input type="number" id="r_b" name="r_b" step="0.01" value="0.9" min="{{ data.min_rb }}" max="{{ data.max_rb }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="r_i">r_i:</label>
+                    <input type="number" id="r_i" name="r_i" step="0.01" value="0.95" min="{{ data.min_ri }}" max="{{ data.max_ri }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="min_set_size">Minimal Candidate Set Size:</label>
+                    <input type="number" id="min_set_size" name="min_set_size" step="1" value="10" min="{{ data.min_setsize }}" max="{{ data.max_setsize }}"><br><br>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="MaxSimTime">Max Allowable Optimization Time (mins):</label>
+                    <input type="number" id="MaxSimTime" name="MaxSimTime" step="1" value="60" min="{{ data.min_time_allowed }}" max="{{ data.max_time_allowed }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="min_temperature">Minimal Allowable Temperature:</label>
+                    <input type="number" id="min_temperature" name="min_temperature" value="1e-8" step="1e-8" min="{{ data.min_allowableT }}" max="{{ data.max_allowableT }}"><br><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-input-box">
+        <div class="header" onclick="toggleBox('constraint-box-content')" data-target="constraint-box-content">Design Constraint Setup</div>
+        <div id="constraint-box-content" class="content">
+            <span id="disabled-xyz" class="disabled-text">(Max X, Y, and Z can NOT be changed after storing a Nanoparticle or Binding Region. Remove those before editing these values!)</span><br>
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="maxX">Max X (nm):</label>
+                    <input type="number" id="maxX" name="maxX" step="1" value="50" min="{{ data.min_maxX }}" max="{{ data.max_maxX }}">
+                </div>
+                <div class="input-item">
+                    <label for="maxY">Max Y (nm):</label>
+                    <input type="number" id="maxY" name="maxY" step="1" value="50" min="{{ data.min_maxY }}" max="{{ data.max_maxY }}">
+                </div>
+                <div class="input-item">
+                    <label for="maxZ">Max Z (nm):</label>
+                    <input type="number" id="maxZ" name="maxZ" step="1" value="50" min="{{ data.min_maxZ }}" max="{{ data.max_maxZ }}">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="maxBPs"># of Nucleobases in Scaffold:</label>
+                    <input type="number" id="maxBPs" name="maxBPs" step="1" value="7249" min="{{ data.min_bps }}" max="{{ data.max_bps}}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="minEdgeLength">Minimal Allowable Edge Length (# of basepairs):</label>
+                    <input type="number" id="minEdgeLength" name="minEdgeLength" step="1" value="42" min="{{ data.min_minEL }}" max="{{ data.max_minEL }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="minAngle">Minimal Allowable Face Angle (degrees):</label>
+                    <input type="number" id="minAngle" name="minAngle" step="1" value="10" min="{{ data.min_minAng }}" max="{{ data.max_minAng }}"><br><br>
+                </div>
+            </div>
+    </div>
+    </div>
+
+    <div class="custom-input-box">
+        <div class="header" onclick="toggleBox('np-box-content')" data-target="np-box-content">Nanoparticle Region(s)</div>
+        <form id="NP_Form">
+            <div id="np-box-content" class="content">
+                <strong> Corner 1 of NP Region (cube-based approximation)</strong>
+            <div class="input-row">
+                <label for="C1">3D Point (X, Y, Z):</label>
+                <input type="text" id="C1" name="C1" placeholder="3D Point (X, Y, Z)">
+            </div>
+                <br>
+            <strong> Corner 2 of NP Region (cube-based approximation)</strong>
+                <div class="input-row">
+                    <label for="C2">3D Point (X, Y, Z):</label>
+                    <input type="text" id="C2" name="C2" placeholder="3D Point (X, Y, Z)">
+
+            </div>
+
+            <br>
+            <div class="input-row">
+                <button type="button" id="submit_NP" name="submit_NP">Store NP</button>
+            </div>
+            <div class="input-row">
+                <br>
+            </div>
+            <div class="input-row">
+                <h4> Current Active Nanoparticle Regions</h4>
+            </div>
+            <table id="data-table-NP" class="custom-table">
+              <thead>
+                <tr>
+                  <th>Corner 1 (X, Y, Z)</th>
+                  <th>Corner 2 (X, Y, Z)</th>
+                  <th>Remove?</th>
+                </tr>
+              </thead>
+                <tbody>
+                <!-- ... (existing rows or leave it empty) ... -->
+                </tbody>
+            </table>
+        </div>
+
+        </form>
+
+    </div>
+
+    <div class="custom-input-box">
+        <div class="header" onclick="toggleBox('np-box-content')" data-target="binding-box-content">Binding Region(s)</div>
+        <form id="BR_Form">
+            <div id="binding-box-content" class="content">
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="pointInput1">Binding Point 1 (required):</label>
+                    <input type="text" id="pointInput1" name="pointInput1" placeholder="Required (X, Y, Z)">
+                </div>
+                <div class="input-item">
+                    <label for="pointInput2">Binding Point 2 (optional):</label>
+                    <input type="text" id="pointInput2" name="pointInput2" placeholder="Optional (X, Y, Z)">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="pointInput3">Binding Point 3 (optional):</label>
+                    <input type="text" id="pointInput3" name="pointInput3" placeholder="Optional (X, Y, Z)">
+                </div>
+                <div class="input-item">
+                    <label for="pointInput4">Binding Point 4 (optional):</label>
+                    <input type="text" id="pointInput4" name="pointInput4" placeholder="Optional (X, Y, Z)">
+                </div>
+            </div>
+
+
+            <div class="input-row">
+                <button type="button" id="submit_BR" name="submit_BR">Store Binding Region</button>
+            </div>
+            <div class="input-row">
+                <br>
+            </div>
+            <div class="input-row">
+                <h4> Current Active Binding Regions</h4>
+            </div>
+            <table id="data-table-BR" class="custom-table">
+              <thead>
+                <tr>
+                  <th>Vertex 1</th>
+                  <th>Vertex 2 (optional)</th>
+                  <th>Vertex 3 (optional)</th>
+                  <th>Vertex 4 (optional)</th>
+                  <th>Remove?</th>
+                </tr>
+              </thead>
+                <tbody>
+                <!-- ... (existing rows or leave it empty) ... -->
+                </tbody>
+            </table>
+        </div>
+
+        </form>
+    </div>
+
+    <div class="custom-input-box">
+        <div class="header" onclick="toggleBox('advanced-box-content')" data-target="advanced-box-content">Advanced Options</div>
+        <div id="advanced-box-content" class="content">
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="random_seed">Random Seed #:</label>
+                    <input type="number" id="random_seed" name="random_seed" step="1" value="100"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="extend_rule_distance">Extend Rule Distance (nm):</label>
+                    <input type="number" id="extend_rule_distance" name="extend_rule_distance" step="1" value="1" min="{{ data.min_extend_rule_dist }}" max="{{ data.max_extend_rule_dist }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="max_edge_mult">Max Edge Multiplier:</label>
+                    <input type="number" id="max_edge_mult" name="max_edge_mult" step="1" value="8" min="{{ data.min_multiplier }}" max="{{ data.max_multiplier }}"><br><br>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="repulsion_const">Repulsion Constant:</label>
+                    <input type="number" id="repulsion_const" name="repulsion_const" step="0.1" value="2.0" min="{{ data.min_repulsion_const }}" max="{{ data.max_repulsion_const}}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="repulsion_distance">Repulsion Distance (nm):</label>
+                    <input type="number" id="repulsion_distance" name="repulsion_distance" step="0.1" value="2.0" min="{{ data.min_repulsion_dist }}" max="{{ data.max_repulsion_dist }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="max_edges_at_node">Max Number of Edges per Node:</label>
+                    <input type="number" id="max_edges_at_node" name="max_edges_at_node" step="1" value="6" min="{{ data.min_edges_at_node }}" max="{{ data.max_edges_at_node }}"><br><br>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="numDecimals">Precision (number of decimals):</label>
+                    <input type="number" id="numDecimals" name="repulsion_const" step="1" value="5" min="{{ data.min_decimals }}" max="{{ data.max_decimals}}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="cooling_rate">Cooling Rate (only if using Geometric):</label>
+                    <input type="number" id="cooling_rate" name="cooling_rate" step="0.01" value="0.95" min="{{ data.min_cooling_rate }}" max="{{ data.max_cooling_rate }}"><br><br>
+                </div>
+                <div class="input-item">
+                    <label for="triki_delta">Triki Delta T (only if using Triki):</label>
+                    <input type="number" id="triki_delta" name="triki_delta" step="0.01" value="10.00" min="{{ data.min_triki_T }}" max="{{ data.max_triki_T }}"><br><br>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-item">
+                    <label for="allow_self_intersecting_geometries">Allow Self-Intersecting Geometries?</label>
+                        <select id="allow_self_intersecting_geometries" name="allow_self_intersecting_geometries">
+                            <option value="True" selected>Yes</option>
+                            <option value="False">No</option>
+                        </select>
+                </div>
+            </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <div id="graph-container"></div>
+
+
+    <button id="download_input_file" name="download_input_file"> Download Input File </button>
+
+
+</body>
+
+{% endblock %}

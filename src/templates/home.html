@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container">
+    <h1>Upload .aj1 File</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-danger">
+                {% for category, message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <p>Click the button below to select a .aj1 file for upload.</p>
+    <p>Please note: After uploading, figures may take a few seconds to load when switching between tabs</p>
+    <form method="POST", enctype="multipart/form-data">
+        {{form.hidden_tag()}}
+        {{form.file()}}
+        {{form.submit()}}
+    </form>
+</div>
+
+
+
+{% endblock content %}

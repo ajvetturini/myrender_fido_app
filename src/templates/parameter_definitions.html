@@ -1,0 +1,111 @@
+{% extends "template.html" %}
+{% block content %}
+<body>
+<div id="parameter-descriptions">
+    <strong>End Generative Process Criterion</strong> <br>
+     <p><strong>Max Simulation Time: </strong>
+    An end criteria similar to max number of epochs, it will ensure that the MOSA process does not run indefinitely. </p>
+
+    <p><strong>Minimal Temperature: </strong>
+    An end criteria that will end a generative process if any objective function temperature drops below this value </p>
+
+    <p><strong>Max number of epochs: </strong>
+    Controls the depth of search, the higher the value the deeper the search should go. </p>
+    <br><br>
+
+
+    <strong>MOSA Parameter Definitions: </strong><br>
+    <p><strong>Cooling Schedule</strong>
+    These are the implemented cooling schedules which can control how Simulated Annealing switches from exploration to exploitative behaviors during the generative process.
+    <li> Huang (default): HRSV Schedule which manipulates temperature based on objective function changes </li>
+    <li> Triki: Triki schedule which cools temperature based on objective function changes and the Triki Delta T hyperparameter you must specify in "Advanced Options". </li>
+    <li> Geometric: Basic schedule that always switches from explorative to exploitive over time through geometric cooling of temperatures using the Geometric Cooling Rate parameter foudn in "Advanced Options"</li>
+    </p>
+
+    <p><strong>Acceptance Function: </strong>
+    These are the implemented acceptance functions which can control how MOSA goes about accepting objectively worse solutions to explore a design space.
+    <li> Standard (default): Exponential decrease analogous to traditional Simulated Annealing </li>
+    <li> Logistic: Logistic Curve Acceptance Probability Function </li>
+    <li> Linear: Scalar linear Acceptance Probability Function</li>
+    </p>
+
+    <p><strong>Allow Self Intersecting Surfaces: </strong>
+    This will allow the generative process to consider unobvious geometries to solve the objective functions.
+    <li> Yes (default): Allow for a wider design space search using self intersecting surfaces </li>
+    <li> No: Do not allow self-intersecting surfaces </li></p>
+
+
+    <p><strong>NT1: </strong>
+    Number of iterations to initialize the temperatures (default value of 1000 recommended). Larger values can allow for a deeper initial archive. </p>
+
+    <p><strong>NT2: </strong>
+    Number of accepted solutions in MOSA that controls when the temperature should be quenched (and the epoch counter increases) </p>
+
+    <p><strong>N_Bi: </strong>
+    Number of iterations at some epoch i for which MOSA will execute a return to base to search the Pareto </p>
+
+    <p><strong>N_Bi Lower Limit: </strong>
+    Lowest amount of iterations at some epoch to consider returning to base </p>
+
+    <p><strong>N_a: </strong>
+    Similar to NT2, but it is a max number of accepted solutions at any given epoch before quenching the temperature </p>
+
+    <p><strong>r_b: </strong>
+    Decreases N_Bi at each epoch iteration as we want to execute return to bases more often the longer the search goes to fully explore the Pareto</p>
+
+    <p><strong>r_i: </strong>
+    Lowers the candidate set size at each epoch iteration such that we focus on more isolated regions of the Pareto the longer the search goes on </p>
+
+    <p><strong>Minimal Set Size: </strong>
+    The minimal size of candidates we will randomly choose from when executing a return to base </p>
+    <br><br>
+
+    <strong>Design Constraint Definitions</strong><br>
+    <p><strong>Max X: </strong>
+    Max size of bounding box in X direction (in nanometers) </p>
+    <p><strong>Max Y: </strong>
+    Max size of bounding box in Y direction (in nanometers) </p>
+    <p><strong>Max Z: </strong>
+    Max size of bounding box in Z direction (in nanometers) </p>
+    <p><strong>Max Number of Nucleobases: </strong>
+    During MOSA, all designs will comply to have an estimated scaffold length below this value. Note that this is just an estimate, and sometimes generated designs may have a slightly longer scaffold then desired! </p>
+    <p><strong>Minimal Allowable Edge Length: </strong>
+    The smallest edge length allowable in a generated design, comes from DAEDALUS2 limitations</p>
+    <p><strong>Minimal Face Angle: </strong>
+    The smallest face angle allowable in a generated design, comes from DAEDALUS2 limitations</p>
+    <br><br>
+
+    <strong>Advanced Option Definitions</strong>
+    <p><strong>Seed: </strong>
+    Random seed used in the MOSA process which allows for replication of results.</p>
+
+    <p><strong>Extend Rule Distance: </strong>
+    Controls the distance of the normal face direction and extend vertex rules, in units of nm.</p>
+
+    <p><strong>Max Edge Multiplier: </strong>
+    Controls the max edge length of a generated design as a multiple of the minimal allowable edge length</p>
+
+    <p><strong>Repulsion Constant: </strong>
+    Sets the scale to the repulsion objective function calculation.</p>
+
+    <p><strong>Repulsion Distance: </strong>
+    Controls the distance between any pair of two edges for which we should consider electrostatic repulsion.</p>
+
+    <p><strong>Max number of Edges per Node: </strong>
+    Controls the max number of edges per node allowed during a search (as too many edges per node can lead to very flexible structures)</p>
+
+    <p><strong>Extend Rule Distance: </strong>
+    Controls the distance of the normal face direction and extend vertex rules, in units of nm.</p>
+
+    <p><strong>Precision (number of decimals): </strong>
+    Controls the number of decimals to use in the calculation.</p>
+
+    <p><strong>Cooling Rate (only if using Geometric): </strong>
+    Sets the cooling rate for the geometric algorithm.</p>
+
+    <p><strong>Triki Delta T (only if using Triki): </strong>
+    Specifies the delta T value when using the Triki algorithm.</p>
+
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "template.html" %}
+{% block content %}
+<h1> Overview of the WIP Software Name!</h1>
+<p style="text-align:left;">
+    This online resource is maintained as a joint collaboration between the <a href="https://www.andrew.cmu.edu/user/bex/pages/welcome/">Microsystems & Mechanobiology Lab</a> (PI: Prof. Rebecca E. Taylor) and <a href="https://www.cmu.edu/me/idig/">Integrated Design Innovation Group</a> (PI: Prof. Jon Cagan) at Carnegie Mellon University in Pittsburgh, PA.<br><br>
+
+    <b> How to Use </b><br>
+    1) You can use <a href="create_input_file"> online create an input file</a> to create an input file for the MOSA software (described below in 2). The input file is simply a JSON file with input conditions, and you may find it easier to just manipulate the JSON file once you use the software more than a few times.
+    <br><br>
+    2) Clone the MOSA code from GitHub <a href="https://github.com/ajvetturini/FIDO">here</a>. You can simply run "MOSA_wireframe_generator JSON_INPUT_PATH OUTPUT_PATH" from terminal to let the generative process begin. When cloning from GitHub, we'd recommend setting up a new virtual environment and running "pip install requirements" so that the necessary Python packages are installed. You can read more on how to run MOSA from the GitHub repository webpage.
+    <br><br>
+    3) After running the MOSA optimizer, it will output a .aj1 file into the specified OUTPUT_PATH. You can upload this file in the <a href="upload_results_file"> Open Results File</a> page and analyze the generated structures. From here you can download a desired structure, and the download will include: 1) a PLY file, 2) The input scaffold sequence, 3) a <a href="https://cando-dna-origami.org/"> CanDo</a> file, 4) a <a href="https://cadnano.org/"> caDNAno</a> file, and 5) <a href="https://oxdna.org/"> oxDNA / oxView</a> top and dat files. This package uses the <a href="https://daedalus-dna-origami.org/"> DAEDALUS2</a> algorithm to automatically generate the scaffold and staple sequences on the generated structures PLY file using the standard M13 scaffold (by default) or through your own custom scaffold sequence.
+
+    <br><br>
+
+    <b> Questions? </b><br>
+    If you have questions about the software, please contact AJ via <a href="mailto:avetturi@andrew.cmu.edu">email</a>.
+
+    <br><br>
+
+    <b> GitHub and Code Availability:</b><br>
+    This code is available on GitHub <a href="https://github.com/ajvetturini/FIDO">here</a>. This tool
+    is freely available under the <b> AJ ADD LICENSE INFORMATION HERE </b> and the source code is written in Python 3.
+
+    <br><br>
+
+    <b> Funding: </b><br>
+    This work is supported by ... AJ ADD FUNDING SOURCE STUFF HERE!!!
+
+    <br><br>
+    <b> Common Questions: </b><br>
+    Q1: Why is MOSA not generating the output CanDo / caDNAno / oxView files? <br>
+    A1: If the scaffold length you input is too short, the DAEDALUS2 software will fail to generate the wireframe structure. <br>
+
+    <br>
+    <b> Known Problems </b><br>
+    P1: We are currently estimating the scaffold used through a simple process, and this is typically a conservative estimate. In reality, the scaffold required may be longer than what we estimate which could cause issues.
+    <br>
+    P2: We have seen DAEDALUS2 sometimes "scale up" edge lengths when not intended. We can not control this behavior, but we are looking to include design constraint checks which prevent these types of geometries from being evaluated.
+
+</p>
+{% endblock content %}
