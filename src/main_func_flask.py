@@ -2,7 +2,7 @@
 This will support the development of DNA Wireframe Modules using a simple and minimal web based application that can
 then be hosted.
 """
-from flask import Flask, current_app
+from flask import Flask
 from flask_session import Session
 from datetime import timedelta
 from views import main
@@ -10,7 +10,9 @@ import os
 
 
 def create_app():
-    myapp = Flask(__name__, template_folder='/Users/kodak/FlaskApp_FIDO_Host/src/templates', static_folder='/Users/kodak/FlaskApp_FIDO_Host/src/static')
+    template_folderpath = os.path.join(os.getcwd(), 'templates')
+    static_folderpath = os.path.join(os.getcwd(), 'static')
+    myapp = Flask(__name__, template_folder=template_folderpath, static_folder=static_folderpath)
     basedir = os.path.abspath(os.path.dirname(__file__))
     UPLOAD_FOLDER = os.path.join(basedir, 'temp_uploaded_files')
     myapp.config['SESSION_TYPE'] = 'filesystem'
