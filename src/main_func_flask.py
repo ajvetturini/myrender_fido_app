@@ -10,8 +10,8 @@ import os
 
 
 def create_app():
-    template_folderpath = os.path.join(os.getcwd(), 'templates')
-    static_folderpath = os.path.join(os.getcwd(), 'static')
+    template_folderpath = os.path.join(os.path.join(os.getcwd(), 'src'), 'templates')
+    static_folderpath = os.path.join(os.path.join(os.getcwd(), 'src'), 'static')
     myapp = Flask(__name__, template_folder=template_folderpath, static_folder=static_folderpath)
     basedir = os.path.abspath(os.path.dirname(__file__))
     UPLOAD_FOLDER = os.path.join(basedir, 'temp_uploaded_files')

@@ -129,6 +129,9 @@ class Strand:
             else:
                 unassigned.append(b)
 
+    def reset_base_counter(self):
+        self.base_counter = 0  # Reset function so we can call this many times
+
 
 def reconstruct_strands(three_ends, bases):
     strands = []
@@ -407,3 +410,6 @@ def convert_cndo_to_oxdna_in_python(cndo_filepath, box_size: 150.):
     if ref_angle < 0 and abs(ref_angle) > 0.8:  # likely selected the wrong orientation for preferred nucleotide!
         Strand.base_counter = 0
         s = load_and_convert(opts, invert_preference=True)
+
+    # At the end we always reset the strand counter to allow us to use this script export times!
+    Strand.base_counter = 0

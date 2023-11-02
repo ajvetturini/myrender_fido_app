@@ -2,7 +2,7 @@ from dash import Dash, dcc, html, callback, callback_context
 from dash.dependencies import Input, Output, State
 from MultiObjective_Shape_Annealing import ShapeAnnealer
 from Ply_Graphs_3D import DesignSpace3D
-from tacoxDNA.src.CanDo_oxDNA import convert_cndo_to_oxdna_in_python
+
 from MOSA_wireframe_generator import find_min_and_maxes
 import plotly.graph_objs as go
 import shutil
@@ -26,7 +26,7 @@ def return_read_data():
 def write_out_cando_cadnano(filepath, plypath, edge_length, dna_seq):
     writepath = os.path.join(filepath, 'caDNAno_cando_oxDNA_files')
     os.makedirs(writepath)
-    DAED_MASTER_PATH = os.path.join(os.getcwd(), 'DAEDALUS')
+    DAED_MASTER_PATH = os.path.join(os.path.join(os.getcwd(), 'src'), 'DAEDALUS')
     M13_PATH = os.path.join(DAED_MASTER_PATH, 'M13.txt')
 
     # Read in DNA sequence and determine if we need to save a txt file of the input scaffold:
@@ -94,6 +94,7 @@ def write_out_cando_cadnano(filepath, plypath, edge_length, dna_seq):
 
     # After cleaning out the folder, we simply pass the cando file_path to tacoxdna to convert and create oxDNA
     if CNDO_FILEPATH is not None:
+        from tacoxDNA.src.CanDo_oxDNA import convert_cndo_to_oxdna_in_python
         convert_cndo_to_oxdna_in_python(cndo_filepath=CNDO_FILEPATH, box_size=150.)
 
 

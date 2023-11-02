@@ -914,11 +914,8 @@ document.getElementById("download_input_file").addEventListener("click", functio
     var a = document.createElement('a');
     a.href = url;
     a.download = 'MOSA_Input.json'; // You can specify the filename here
-    document.body.appendChild(a);
+    a.style.display = 'none'; // Hide the download link
     a.click();
-
-    // Clean up
-    document.body.removeChild(a);
     URL.revokeObjectURL(url);
 });
 

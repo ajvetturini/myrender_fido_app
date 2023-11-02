@@ -4,6 +4,7 @@ from dash_results_board import update_dashboard
 import threading
 import time
 import os
+from flaskwebgui import FlaskUI
 
 def cleanup_task():
     while True:
@@ -27,10 +28,14 @@ server = app.server
 # Call the update_dashboard function to set up the initial layout
 update_dashboard(app)
 # Create a simple cleanup watcher:
-cleanup_thread = threading.Thread(target=cleanup_task)
-cleanup_thread.daemon = True
-cleanup_thread.start()
+#cleanup_thread = threading.Thread(target=cleanup_task)
+#cleanup_thread.daemon = True
+#cleanup_thread.start()
+
+def run_server():
+    app.run_server(host='0.0.0.0', port=8080, debug=False)
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(host='0.0.0.0', port=8080, debug=False)
+
