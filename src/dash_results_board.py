@@ -1,9 +1,8 @@
 from dash import Dash, dcc, html, callback, callback_context
 from dash.dependencies import Input, Output, State
-from MultiObjective_Shape_Annealing import ShapeAnnealer
-from Ply_Graphs_3D import DesignSpace3D
-
-from MOSA_wireframe_generator import find_min_and_maxes
+from src.MultiObjective_Shape_Annealing import ShapeAnnealer
+from src.Ply_Graphs_3D import DesignSpace3D
+from .MOSA_wireframe_generator import find_min_and_maxes
 import plotly.graph_objs as go
 import shutil
 import random
@@ -17,6 +16,7 @@ from flask import session, current_app
 
 
 def return_read_data():
+    from .MultiObjective_Shape_Annealing import ShapeAnnealer
     filename = session['data_filepath']
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     with open(filepath, 'rb') as f:
@@ -144,7 +144,7 @@ def update_dashboard(dash_app):
                              style={'width': '100%'})
                 ], style={'width': '50%', 'display': 'inline-block'}),
 
-                html.Div(id='pareto_front', style={'width': '35%', 'display': 'inline-block', 'float': 'right'})
+                html.Div(id='pareto_front', style={'width': '50%', 'display': 'inline-block', 'float': 'right'})
             ])
 
         elif tab == 'optimization-search-animation':
@@ -233,12 +233,12 @@ def update_dashboard(dash_app):
                                           l2=list(opt_data.MOSA_archive.keys()))
 
             design_figure.update_layout(
-                margin=dict(l=0, r=75, b=0, t=0),
+                margin=dict(l=20, r=0, b=0, t=0),
                 width=700,
                 height=650
             )
             design_figure2.update_layout(
-                margin=dict(l=0, r=75, b=20, t=0),
+                margin=dict(l=20, r=0, b=20, t=0),
                 width=700,
                 height=650
             )

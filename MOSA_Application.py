@@ -1,15 +1,23 @@
 import os
 import sys
+import webbrowser
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtCore import QUrl
-from app import run_server
+from PyQt5.Qt import QDesktopServices
+from src.app import run_server
 import atexit
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings
 import multiprocessing
 import time
 import requests
+import sys
+import os
+
+src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'src'))
+# Add the src directory to the Python path
+sys.path.insert(0, src_dir)
 
 
 # Global reference to the server process
@@ -43,9 +51,9 @@ def exit_handler():
     if server_process is not None and server_process.is_alive():
         # First delete files
         curDir = os.getcwd()
-        dir1 = os.path.join(os.path.join(curDir, 'src'), 'flask_session')
-        dir2 = os.path.join(os.path.join(curDir, 'src'), 'temp_stored_data')
-        dir3 = os.path.join(os.path.join(curDir, 'src'), 'temp_uploaded_files')
+        dir1 = os.path.join(os.path.join(curDir, 'src'), 'temp_stored_data')
+        dir2 = os.path.join(os.path.join(curDir, 'src'), 'temp_uploaded_files')
+        dir3 = os.path.join(curDir, 'flask_session')
         delete_files_in_directory(dir1)
         delete_files_in_directory(dir2)
         delete_files_in_directory(dir3)
@@ -54,6 +62,14 @@ def exit_handler():
         server_process.terminate()
         server_process.join()
 
+
+def verify_link(link):
+    # Handle the hyperlink click event here
+    current_url = link.toString()
+    if ((".edu" in current_url) or (".com" in current_url) or (".org" in current_url)) and ("mailto" not in current_url):
+        return True
+    else:
+        return False
 
 def main():
     global server_process
@@ -70,14 +86,34 @@ def main():
     # Create the PyQt5 app
     app = QApplication(sys.argv)
 
+    class CustomWebEnginePage(QWebEnginePage):
+        """ Custom WebEnginePage to customize how we handle link navigation """
+        # Store external windows.
+        external_windows = []
+
+        def acceptNavigationRequest(self, url, _type, isMainFrame):
+            if (_type == QWebEnginePage.NavigationTypeLinkClicked and
+                    verify_link(url)):
+                # Pop up external links into a new window.
+                w = QWebEngineView()
+                w.setUrl(url)
+                w.show()
+
+                # Keep reference to external window, so it isn't cleared up.
+                self.external_windows.append(w)
+                return False
+            return super().acceptNavigationRequest(url, _type, isMainFrame)
+
     class DashWindow(QMainWindow):
         def __init__(self, url):
             super(DashWindow, self).__init__()  # Call the parent class constructor correctly
 
             self.browser = QWebEngineView()
+            self.browser.setPage(CustomWebEnginePage(self))
             self.browser.setUrl(QUrl(url))
             # Handling Downloads:
             self.browser.page().profile().downloadRequested.connect(self.on_downloadRequested)
+            #self.browser.page().loadFinished.connect(self.link_clicked_handler)
 
             # Configure QWebEngineSettings
             web_settings = self.browser.settings()

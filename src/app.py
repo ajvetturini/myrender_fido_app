@@ -1,10 +1,9 @@
-from main_func_flask import app as flask_app
-from main_func_dash import create_dash_application  # Import your Dash app from dash_app.py
-from dash_results_board import update_dashboard
-import threading
+from .main_func_flask import app as flask_app
+from .main_func_dash import create_dash_application  # Import your Dash app from dash_app.py
+from .dash_results_board import update_dashboard
 import time
 import os
-from flaskwebgui import FlaskUI
+
 
 def cleanup_task():
     while True:

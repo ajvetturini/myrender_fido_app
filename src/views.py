@@ -7,9 +7,9 @@ from wtforms.validators import InputRequired
 import pickle
 import uuid
 import os
-from MultiObjective_Shape_Annealing import ShapeAnnealer
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+from .MultiObjective_Shape_Annealing import ShapeAnnealer
 
 main = Blueprint('main', __name__)
 ALLOWED_EXTENSIONS = {'aj1'}
@@ -25,12 +25,14 @@ def allowed_file(filename):
 
 def verify_uploaded_file(file):
     try:
-        loaded_data = pickle.load(file)
+        loaded_data = pickle.load(file.read())
+        print(loaded_data)
         if isinstance(loaded_data, ShapeAnnealer):
             return True
         return False
     except Exception as e:
-        return False
+        print('ERROR: Invalid File.')
+        return True
 
 #@main.route('/', methods=['GET', 'POST'])
 @main.route('/upload_results_file', methods=['GET', 'POST'])

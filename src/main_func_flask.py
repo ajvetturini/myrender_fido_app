@@ -5,7 +5,7 @@ then be hosted.
 from flask import Flask
 from flask_session import Session
 from datetime import timedelta
-from views import main
+from .views import main
 import os
 
 

@@ -15,7 +15,7 @@ import copy
 from random import seed, random, choice, uniform
 import warnings
 import pickle
-import Ply_Graphs_3D as pg3
+import src.Ply_Graphs_3D as pg3
 import numpy as np
 from dataclasses import dataclass, field
 import os
